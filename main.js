@@ -1,24 +1,20 @@
-const url = "https://www.espncricinfo.com/series/ipl-2020-21-1210595";
-// Venue date opponent result runs balls fours sixes sr
-const request = require("request");
-const cheerio = require("cheerio");
-const AllMatcgObj = require("./Allmatch");
-// home page 
-request(url, cb);
-function cb(err, response, html) {
-    if (err) {
-        console.log(err);
-    } else {
-        // console.log(html);
-        extractLink(html);
-    }
-}
-function extractLink(html) {
-    let $ = cheerio.load(html);
-    let anchorElem = $("a[data-hover='View All Results']");
-    let link = anchorElem.attr("href");
-    // console.log(link);
-    let fullLink = "https://www.espncricinfo.com" + link;
-    // console.log(fullLink);
-    AllMatcgObj.gAlmatches(fullLink);
-}
+// npm install minimist
+// npm install axios
+// main.js --dest="download.html" --url="https://www.espncricinfo.com/series/icc-cricket-world-cup-2019-1144415/match-results" 
+
+let minimist = require("minimist");
+let axios = require("axios");
+let fs = require("fs");
+
+let args = minimist(process.argv);
+
+// console.log(args.url);
+// console.log(args.dest);
+
+let dwldpromise = axios.get(args.url);
+
+dwldpromise.then(function(response){
+    let html = response.data;
+    fs.writeFileSync(args.dest, html , "utf-8");
+})
+ 
