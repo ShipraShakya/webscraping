@@ -1,5 +1,6 @@
 // node firstjson.js --source=teams.json --dest=root
-
+// npm install ldf-lib
+let pdf = require("pdf-lib");
 let minimist = require("minimist");
 let fs = require("fs");
 let excel = require("excel4node");
@@ -38,13 +39,26 @@ let teams = JSON.parse(teamsJSON);
 //     fs.mkdirSync(folderName);
 // }
 
-// // creating excel file
-
+// // creating pdf file
+fs.mkdirSync(args.dest);
 for(let i=0;i<teams.length;i++){
     let folderName = path.join(args.dest, teams[i].name);
+    fs.mkdirSync(folderName);
+
     for(let j=0;j<teams[i].matches.length;j++){
         let fileName = path.join(folderName, teams[i].matches[j].vs+".pdf");
-        fs.writeFileSync(fileName);
-        
+        fs.writeFileSync(fileName,"", "utf-8");
+        createScoreCard(teams[i].name, teams[i].matches[j], fileName);
     }
+}
+
+function createScoreCard(teamName, match, fileName){
+    // this fuunction create pdf for match in appropriate folder with correct details.
+    let team1 = teamName;
+    let team2 = match.vs;
+    let result = team1+" "+match.result;
+    
+    // let tamplateBytes = 
+
+    // const pdf
 }
