@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.24.0",
     "cheerio": "^1.0.0-rc.10",
+    "excel4node": "^1.7.2",
     "jsdom": "^18.1.1",
     "minimist": "^1.2.5",
     "request": "^2.88.2"
