@@ -47,7 +47,7 @@ for(let i=0;i<teams.length;i++){
 
     for(let j=0;j<teams[i].matches.length;j++){
         let fileName = path.join(folderName, teams[i].matches[j].vs+".pdf");
-        fs.writeFileSync(fileName,"", "utf-8");
+        // fs.writeFileSync(fileName,"", "utf-8");
         createScoreCard(teams[i].name, teams[i].matches[j], fileName);
     }
 }
@@ -57,8 +57,41 @@ function createScoreCard(teamName, match, fileName){
     let team1 = teamName;
     let team2 = match.vs;
     let result = team1+" "+match.result;
-    
-    // let tamplateBytes = 
 
-    // const pdf
+    let originalBytes = fs.readFileSync("Template.pdf");
+    let promiseToLoadBytes = pdf.PDFDocument.load(originalBytes);
+
+    promiseToLoadBytes.then(function(pdfdoc){  
+        let page = pdfdoc.getPage(0);
+        page.drawText(team1,{
+            x:350,
+            y:667,
+            size: 16
+        });
+        page.drawText(team2,{
+            x:350,
+            y:644,
+            size: 16
+        });
+        page.drawText(result,{
+            x:350,
+            y:622,
+            size: 16
+        });
+        let promiseToSave = pdfdoc.save();
+        promiseToSave.then(function(changedBytes){
+            fs.writeFileSync(fileName, changedBytes);
+        })
+    });
+    
 }
+
+
+
+
+
+
+
+
+
+
